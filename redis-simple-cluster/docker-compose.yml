@@ -1,0 +1,29 @@
+version: '3'
+services:
+  redis-node1:
+    image: redis:latest
+    container_name: redis-node1
+    ports:
+      - "7001:6379"
+    networks:
+      lab_network:
+        ipv4_address: 172.25.0.10
+    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000
+
+  redis-node2:
+    image: redis:latest
+    container_name: redis-node2
+    ports:
+      - "7002:6379"
+    networks:
+      lab_network:
+        ipv4_address: 172.25.0.11
+    command: redis-server --appendonly yes --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000
+
+networks:
+  lab_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/16
